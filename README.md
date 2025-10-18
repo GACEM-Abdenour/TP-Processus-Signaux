@@ -349,11 +349,10 @@ Les données :
 	- le fils f2 retourne la valeur 10
 	- le fils f3 retourne la valeur 3
 	
-	---
+---
 	
 ## Réponse
 	
-### Solution avec wait()
 	
 ```c
 	#include <stdio.h>
