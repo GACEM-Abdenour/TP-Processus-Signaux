@@ -563,33 +563,33 @@ Le signal envoyé par `Ctrl+C` est **SIGINT** (signal numéro 2). C'est un signa
 ```
 	
 3. Envoyer le signal avec kill -9 :
-	```bash
+```bash
 	kill -9 24436
-	```
+```
 	
-	**Que se passe-t-il ?**
+**Que se passe-t-il ?**
 	
-	Le programme se termine **immédiatement et brutalement** sans possibilité de résistance, et on voit ce message :
-	```
-	[1]    24436 killed     ./infini
-	```
+Le programme se termine **immédiatement et brutalement** sans possibilité de résistance, et on voit ce message :
+```
+[1]    24436 killed     ./infini
+```
 	
-	**Signal envoyé :**
+**Signal envoyé :**
 	
-	`kill -9` envoie le signal **SIGKILL** (signal numéro 9). C'est un signal de terminaison forcée qui **ne peut pas être intercepté, ignoré ou géré** par le processus.
+`kill -9` envoie le signal **SIGKILL** (signal numéro 9). C'est un signal de terminaison forcée qui **ne peut pas être intercepté, ignoré ou géré** par le processus.
 	
-	**Différence entre SIGINT et SIGKILL :**
+**Différence entre SIGINT et SIGKILL :**
 	
-	| Signal | Numéro | Peut être intercepté ? | Usage |
-	|--------|--------|------------------------|-------|
-	| SIGINT | 2 | ✅ Oui | Demande de terminaison "propre" |
-	| SIGKILL | 9 | ❌ Non | Terminaison forcée immédiate |
+| Signal | Numéro | Peut être intercepté ? | Usage |
+|--------|--------|------------------------|-------|
+| SIGINT | 2 | ✅ Oui | Demande de terminaison "propre" |
+| SIGKILL | 9 | ❌ Non | Terminaison forcée immédiate |
 	
-	### 3. Programme assassin.c
+### 3. Programme assassin.c
 	
-	**Code assassin.c :**
+**Code assassin.c :**
 	
-	```c
+```c
 	#include <stdio.h>
 	#include <signal.h>
 	#include <stdlib.h>
@@ -644,51 +644,51 @@ Le signal envoyé par `Ctrl+C` est **SIGINT** (signal numéro 2). C'est un signa
 	
 	Envoi du signal SIGINT au processus 10456...
 	✓ Signal SIGINT envoyé avec succès au PID 10456
-	```
+```
 	
-	**Que se passe-t-il ?**
+**Que se passe-t-il ?**
 	
-	Dans le Terminal 1, le programme `infini` se termine exactement comme si on avait appuyé sur `Ctrl+C`. Le programme `assassin` envoie le même signal SIGINT mais de manière programmatique via la fonction `kill()`.
+Dans le Terminal 1, le programme `infini` se termine exactement comme si on avait appuyé sur `Ctrl+C`. Le programme `assassin` envoie le même signal SIGINT mais de manière programmatique via la fonction `kill()`.
 	
-	### 4. Comportement par défaut des signaux
+### 4. Comportement par défaut des signaux
 	
-	Le comportement par défaut d'un processus à la réception d'un signal dépend du type de signal :
+Le comportement par défaut d'un processus à la réception d'un signal dépend du type de signal :
 	
-	| Action par défaut | Signaux concernés | Description |
-	|-------------------|-------------------|-------------|
-	| **Term** (Terminaison) | SIGINT, SIGTERM, SIGQUIT | Le processus se termine |
-	| **Kill** (Terminaison forcée) | SIGKILL, SIGSTOP | Terminaison immédiate, non interceptable |
-	| **Core** (Core dump) | SIGSEGV, SIGABRT, SIGFPE | Terminaison + génération d'un fichier core |
-	| **Ign** (Ignoré) | SIGCHLD, SIGURG | Le signal est ignoré |
-	| **Stop** (Suspension) | SIGTSTP (Ctrl+Z) | Le processus est suspendu |
-	| **Cont** (Continuation) | SIGCONT | Reprend un processus suspendu |
+| Action par défaut | Signaux concernés | Description |
+|-------------------|-------------------|-------------|
+| **Term** (Terminaison) | SIGINT, SIGTERM, SIGQUIT | Le processus se termine |
+| **Kill** (Terminaison forcée) | SIGKILL, SIGSTOP | Terminaison immédiate, non interceptable |
+| **Core** (Core dump) | SIGSEGV, SIGABRT, SIGFPE | Terminaison + génération d'un fichier core |
+| **Ign** (Ignoré) | SIGCHLD, SIGURG | Le signal est ignoré |
+| **Stop** (Suspension) | SIGTSTP (Ctrl+Z) | Le processus est suspendu |
+| **Cont** (Continuation) | SIGCONT | Reprend un processus suspendu |
 	
-	**Principaux signaux :**
+**Principaux signaux :**
 	
-	```bash
-	kill -l
-	```
+```bash
+kill -l
+```
 	
-	Sortie (extrait) :
-	```
-	1) SIGHUP       2) SIGINT       3) SIGQUIT      4) SIGILL
-	5) SIGTRAP      6) SIGABRT      7) SIGBUS       8) SIGFPE
-	9) SIGKILL     10) SIGUSR1     11) SIGSEGV     12) SIGUSR2
-	13) SIGPIPE     14) SIGALRM     15) SIGTERM     16) SIGSTKFLT
-	17) SIGCHLD     18) SIGCONT     19) SIGSTOP     20) SIGTSTP
-	```
+Sortie (extrait) :
+```
+1) SIGHUP       2) SIGINT       3) SIGQUIT      4) SIGILL
+5) SIGTRAP      6) SIGABRT      7) SIGBUS       8) SIGFPE
+9) SIGKILL     10) SIGUSR1     11) SIGSEGV     12) SIGUSR2
+13) SIGPIPE     14) SIGALRM     15) SIGTERM     16) SIGSTKFLT
+17) SIGCHLD     18) SIGCONT     19) SIGSTOP     20) SIGTSTP
+```
 	
-	**Signaux non interceptables :**
-	- **SIGKILL (9)** : Terminaison immédiate
-	- **SIGSTOP (19)** : Suspension immédiate
+**Signaux non interceptables :**
+- **SIGKILL (9)** : Terminaison immédiate
+- **SIGSTOP (19)** : Suspension immédiate
+
+Tous les autres signaux peuvent être interceptés et gérés par le processus via la fonction `signal()` ou `sigaction()`.
 	
-	Tous les autres signaux peuvent être interceptés et gérés par le processus via la fonction `signal()` ou `sigaction()`.
+### 5. Interception de SIGINT
 	
-	### 5. Interception de SIGINT
+**Code infini_modifie.c :**
 	
-	**Code infini_modifie.c :**
-	
-	```c
+```c
 	#include <stdio.h>
 	#include <signal.h>
 	#include <unistd.h>
@@ -746,6 +746,6 @@ Le signal envoyé par `Ctrl+C` est **SIGINT** (signal numéro 2). C'est un signa
 	✋ Hello ! I am here
 	
 	En cours d'exécution...
-	```
+```
 	
 	
